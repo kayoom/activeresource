@@ -46,8 +46,13 @@ module ThreadsafeAttributes
   end
 
   def set_threadsafe_attribute_by_thread(name, value, thread)
-    thread["active.resource.#{name}.#{self.object_id}.defined"] = true
-    thread["active.resource.#{name}.#{self.object_id}"] = value
+    if value.nil?
+      thread["active.resource.#{name}.#{self.object_id}.defined"] = nil
+      thread["active.resource.#{name}.#{self.object_id}"] = nil
+    else
+      thread["active.resource.#{name}.#{self.object_id}.defined"] = true
+      thread["active.resource.#{name}.#{self.object_id}"] = value
+  end
   end
 
   def threadsafe_attribute_defined_by_thread?(name, thread)
